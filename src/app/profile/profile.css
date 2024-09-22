@@ -1,0 +1,155 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+  
+  a {
+    text-decoration: none;
+    color: white;
+  }
+  
+  .judul-example{
+    margin: 20px auto;
+    width: 87%;
+    
+  }
+  
+  .container {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  .profile-header {
+    text-align: center;
+  }
+  .profile-header img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+  }
+  .profile-header h1 {
+    margin: 10px 0;
+    font-size: 24px;
+  }
+  .profile-header p {
+    color: #888;
+    margin: 5px 0;
+  }
+  .profile-section {
+    margin-top: 20px;
+  }
+  .profile-section h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+  }
+  .profile-section p {
+    margin: 5px 0;
+  }
+  .profile-section ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  .profile-section ul li {
+    margin-bottom: 5px;
+  }
+  .profile-buttons {
+    margin-top: 20px;
+    text-align: center;
+  }
+  .profile-buttons button {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+  }
+  .profile-buttons button:hover {
+    background-color: #0056b3;
+  }
+  .button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
+  .profile-buttons-edit {
+    margin-top: 20px;
+    text-align: center;
+  }
+  .profile-buttons-edit button {
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    border: none;
+    width: 60%;
+    padding: 10px 15px;
+    color: #fff;
+    border-radius: 25px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+  
+  }
+  .profile-buttons-edit button:hover {
+    background-color: #0056b3;
+  }
+  .button-edit {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+  }
+  
+  .button-edit:hover {
+    background-color: #0056b3;
+  }
+  
+  .basic-info-form {
+    margin-bottom: 10px
+  }
+  
+  input[type=text], 
+  input[type=email], 
+  input[type=date], 
+  input[type=password], 
+  input[type=tel],
+  select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .image-setting {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+  }
+  
+  .image-setting-container {
+    display: flex;
+    justify-content: center;
+  }
