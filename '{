@@ -1,7 +1,0 @@
-HTTP/1.1 500 Internal Server Error
-vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch
-Date: Fri, 06 Sep 2024 03:19:30 GMT
-Connection: keep-alive
-Keep-Alive: timeout=5
-Transfer-Encoding: chunked
-
