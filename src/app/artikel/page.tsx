@@ -1,139 +1,133 @@
-'use client';
-import Navbar from "@/components/navBar";
-import toast, { Toaster } from "react-hot-toast";
-import { useEffect, useState, useCallback, useRef } from 'react';
-import { useInView } from 'react-intersection-observer';
-import Link from "next/link";
+"use client"
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Link from 'next/link';
+import Navbar from '@/components/navBar'; // Pastikan path import sesuai
 
-const photosPerPage = 4;
-
-const fetchPhotos = async (page, query = '') => {
-    try {
-        const res = await fetch(`/api/artikel?page=${page}&limit=${photosPerPage}&search=${query}`);
-        if (!res.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return res.json();
-    } catch (error) {
-        console.error("Error fetching photos:", error);
-        toast.error("Gagal memuat data");
-        return { data: [], total: 0 };
-    }
-};
-
-export default function PhotosPage() {
-    const [photos, setPhotos] = useState([]);
+const ArtikelPage = () => {
+    const [articles, setArticles] = useState<any[]>([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [noResults, setNoResults] = useState(false);
-    const lastQuery = useRef('');
+    const [totalArticles, setTotalArticles] = useState(0);
+    const photosPerPage = 12; // 3 artikel per card, 3 card
 
-    const { ref, inView } = useInView();
-
-    const loadPhotos = useCallback(async (pageNum, query) => {
+    const observer = useRef<IntersectionObserver | null>(null);
+    const lastArticleElementRef = useCallback((node: HTMLDivElement) => {
         if (loading) return;
-        if (lastQuery.current == query && (lastQuery.current == '' && !(lastQuery.current == '' && searchQuery == ''))) return
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                setPage(prevPage => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [loading, hasMore]);
 
+    const fetchArticles = async () => {
         setLoading(true);
-        const newPhotos = await fetchPhotos(pageNum, query);
-
-        if (pageNum === 1) {
-            setPhotos(newPhotos.data);
-            setNoResults(newPhotos.data.length === 0);
-        } else {
-            setPhotos((prev): any => [...prev, ...newPhotos.data]);
+        try {
+            const response = await fetch(`/api/artikel?page=${page}&limit=${photosPerPage}&search=${searchQuery}`);
+            const result = await response.json();
+            if (result.data.length === 0) {
+                setHasMore(false);
+                if (page === 1) setNoResults(true);
+            } else {
+                setArticles(prevArticles => [...prevArticles, ...result.data]);
+                setTotalArticles(result.total);
+                setHasMore(articles.length + result.data.length < result.total);
+                setNoResults(false);
+            }
+        } catch (error) {
+            console.error('Error fetching articles:', error);
+        } finally {
+            setLoading(false);
         }
-
-        setLoading(false);
-        setHasMore(newPhotos.data.length === photosPerPage);
-    }, []);
-
-    useEffect(() => {
-        if (inView && hasMore && !loading) {
-            setPage((prev) => prev + 1);
-        }
-    }, [inView, hasMore, loading]);
-
-    useEffect(() => {
-        const handleSearch = () => {
-            setPhotos([]);
-            setPage(1);
-            setHasMore(true);
-            setNoResults(false);
-            loadPhotos(1, searchQuery);
-        };
-
-        const debounceTimer = setTimeout(() => {
-            if (searchQuery != '') lastQuery.current = searchQuery;
-            handleSearch();
-        }, 700);
-
-        return () => clearTimeout(debounceTimer);
-    }, [searchQuery, loadPhotos]);
-
-    useEffect(() => {
-        if (page > 1) {
-            loadPhotos(page, searchQuery);
-        }
-    }, [page, searchQuery, loadPhotos]);
-
-    const handleSearchInputChange = (e) => {
-        setSearchQuery(e.target.value);
-        setPage(1);
     };
 
-    return (<div>
-        <header>
-            <Navbar />
-        </header>
-        <main>
-            <div className="search-artikel">
-                <div className="search-field2">
-                    <input
-                        className="cari-artikel"
-                        type="text"
-                        placeholder="Cari Artikel"
-                        value={searchQuery}
-                        onChange={handleSearchInputChange}
-                    />
+    useEffect(() => {
+        fetchArticles();
+    }, [page]);
+
+    const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const handleSearch = () => {
+        setArticles([]);
+        setPage(1);
+        setHasMore(true);
+        setNoResults(false);
+        fetchArticles();
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+          // Lakukan sesuatu dengan nilai input, misalnya kirim data ke server
+          handleSearch();
+        }
+      };
+    
+      const groupArticles = (articles: any[], groupSize: number) => {
+        const grouped: any[][] = [];
+        for (let i = 0; i < articles.length; i += groupSize) {
+            grouped.push(articles.slice(i, i + groupSize));
+        }
+        return grouped;
+    };
+
+    const groupedArticles = groupArticles(articles, 4);
+
+    return (
+        <div>
+            <header>
+                <Navbar />
+            </header>
+            <main>
+                <div className="search-artikel">
+                    <div className="search-field2">
+                        <input
+                            className="cari-artikel"
+                            type="text"
+                            placeholder="Cari Artikel"
+                            value={searchQuery}
+                            onChange={handleSearchInputChange}
+                            onKeyDown={handleKeyDown}
+                        />
+                    </div>
+                    <button className="login-btn" onClick={handleSearch}>Cari</button>
                 </div>
-                <button className="login-btn">Cari</button>
-            </div>
 
-            <div className="container-artikel">
-                <div className="container-other">
-
-                    <div className="container-artikel2">
-                        <div className="judul">
-                            <h2>Artikel</h2>
+                <div className="container-artikel">
+                    <div className="container-other">
+                        <div className="container-artikel2">
+                            <div className="judul">
+                                <h2>Artikel</h2>
+                            </div>
+                            {groupedArticles.map((group: any, groupIndex: any) => (
+                                <div key={groupIndex} className="isi-artikel-card">
+                                    {group.map((article: any, index: number) => (
+                                        <Link href={"/artikel/" + article.title.replace(/\s+/g, "-").toLowerCase()+"/"+article.article_id} key={article.article_id}>
+                                            <div className="artikel-card" ref={index === group.length - 1 && groupIndex === groupedArticles.length - 1 ? lastArticleElementRef : null}>
+                                                <img src={article.image} alt={article.title} />
+                                                <h3>{article.title}</h3>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            ))}
+                            {loading && <div className="loaddiv"><div className="loaderr"></div></div>}
+                            {noResults && <p>Tidak ada hasil ditemukan.</p>}
                         </div>
-                        <div className="isi-artikel-card">
-                            {photos.length > 0 ? (
-                                photos.map((photo: any) => (
-                                    <Link href={"/obat/" + photo.title.replace(/\s+/g, "-").toLowerCase()} >
-                                        <div className="artikel-card">
-                                            <img src={photo.image} alt="" />
-                                            <h3>{photo.title}</h3>
-                                        </div>
-                                    </Link>
-                                ))
-                            ) : loading ? (
-                                <p>Memuat...</p>
-                            ) : noResults ? (
-                                <p>Tidak ada hasil ditemukan.</p>
-                            ) : null}
-                        </div>
-
-                        {loading && <div className="loaddiv"><div className="loaderr"></div></div>}
-                        {!loading && hasMore && <div ref={ref} style={{ height: '1px' }} />}
                     </div>
                 </div>
-            </div>
-        </main>
-        <footer>
-            <p>Copyright 2024&copy;Unix Team</p>
-        </footer>
-    </div>);
-}
+            </main>
+            <footer>
+                <p>Copyright 2024&copy;Unix Team</p>
+            </footer>
+        </div>
+    )
+};
+
+export default ArtikelPage;

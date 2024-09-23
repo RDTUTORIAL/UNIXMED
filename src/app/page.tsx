@@ -84,10 +84,10 @@ export default function Home() {
               </h1>
               <p>Temukan solusi untuk kesehatanmu</p>
               <div className="button-intro">
-                <Link href="obat.html" prefetch={true}>
+                <Link href="/obat" prefetch={true}>
                   <button className="CTA-button">Cari Obat</button>
                 </Link>
-                <Link href="artikel.html" prefetch={true}>
+                <Link href="/artikel" prefetch={true}>
                   <button className="CTA-button">Info Kesehatan</button>
                 </Link>
               </div>
@@ -100,12 +100,12 @@ export default function Home() {
         <div className="artikel-homepage">
           <div className="judul">
             <h2>Baca Artikel Terbaru</h2>
-            <Link href="artikel.html" prefetch={true}>Lihat Semua</Link>
+            <Link href="/artikel" prefetch={true}>Lihat Semua</Link>
           </div>
 
           <div className="isi-artikel-card">
             {artikel.map((art: any) => (
-              <Link key={art.id} href={`/artikel/${art.id}`}>
+              <Link key={art.id} href={`/artikel/${art.title.replace(/\s+/g, "-").toLowerCase()}/${art.article_id}`}>
                 <div className="artikel-card">
                   <img src={art.image} alt={art.title} />
                   <h3>{art.title}</h3>

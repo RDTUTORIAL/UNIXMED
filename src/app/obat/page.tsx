@@ -3,6 +3,8 @@ import Navbar from "@/components/navBar";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
+import Footer from "@/components/footer";
+import Link from "next/link";
 
 const photosPerPage = 20;
 
@@ -29,7 +31,7 @@ export default function ObatPage() {
     const [noResults, setNoResults] = useState(false);
     const lastQuery = useRef('');
 
-    const { ref, inView } = useInView();
+    const { ref, inView } = useInView();    
 
     const loadPhotos = useCallback(async (pageNum, query) => {
         if (loading) return;
@@ -109,10 +111,10 @@ export default function ObatPage() {
                     <div className="kategori-item-section">
                         {photos.length > 0 ? (
                             photos.map((photo: any) => (
-                                <a key={photo.id} href={"/obat/"+photo.name.replace(/\s+/g, "-").toLowerCase()} className="kategori-item">
+                                <Link key={photo.id} href={"/obat/"+photo.name.replace(/\s+/g, "-").toLowerCase()} className="kategori-item">
                                     <img src={photo.image} alt={photo.name} className="kategori-img" />
                                     <h4 className="kategori-value">{photo.name}</h4>
-                                </a>
+                                </Link>
                             ))
                         ) : loading ? (
                             <p>Memuat...</p>
@@ -125,6 +127,7 @@ export default function ObatPage() {
                 {loading && <div className="loaddiv"><div className="loaderr"></div></div>}
                 {!loading && hasMore && <div ref={ref} style={{ height: '1px' }} />}
             </main>
+            <Footer></Footer>
         </div>
     );
 }

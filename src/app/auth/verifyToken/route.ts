@@ -2,14 +2,13 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 import { cookies } from "next/headers"
 import fs from "fs"
-var blacklist_path = "./data/blacklist.json"
+import pool from '@/lib/db';
 
 export async function GET(request: Request, response: Response) {    
   const token:any = cookies().get("accessToken") || "";
   try {
-    let blacklist = JSON.parse(fs.readFileSync(blacklist_path, "utf-8"))
-    var index = blacklist.findIndex(x => x.token == token.value)
-    if(index != -1) return new Response('{ "message": "unauthorized" }', { status: 401 })
+    var result = await pool.query(`SELECT * FROM blacklist WHERE token = '${token.value}'`)
+    if (result?.rowCount || 0 > 0) return new Response('{ "valid": false }', { status: 401 }); 
     jwt.verify(token.value, process.env.JWT_SECRET as string);
     return new Response('{ "valid": true }', { status: 200 });   
   } catch (error) {

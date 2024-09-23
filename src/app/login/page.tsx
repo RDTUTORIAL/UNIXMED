@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { headers } from "next/headers"
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
 import Loader from "@/components/Loader";
@@ -15,6 +15,8 @@ export default function LoginForm() {
     const [loading, setLoading] = useState(false);
     const [show, setShow] = useState(false)
     const searchParams = useSearchParams();
+    const [passwordVisible, setPasswordVisible] = useState(false);
+
     useEffect(() => {
         const isLogin = searchParams.get('isRegister');
         if (isLogin && !show) {
@@ -23,6 +25,11 @@ export default function LoginForm() {
             router.replace(`/`);
         }
     }, [searchParams, router]);
+
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+    };
+
     const validate = (formData) => {
         const newErrors: { email?: string, password?: string } = {};
         if (!formData.email) {
@@ -71,7 +78,7 @@ export default function LoginForm() {
     };
 
     return (<div>
-        <Toaster/>
+        <Toaster />
         <main>
             <section>
                 <div className="form-container">
@@ -91,7 +98,7 @@ export default function LoginForm() {
                         <div className="input-group password-container">
                             <label htmlFor="password">Password</label>
                             <input
-                                type="password"
+                                type={passwordVisible ? "text" : "password"}
                                 id="password"
                                 placeholder="Masukkan Password"
                                 name="password"
@@ -99,9 +106,16 @@ export default function LoginForm() {
                             />
                             {errors?.password && <span style={dangerStyle}>{errors?.password}</span>}
                             <div className="toggle-password-container">
-                                <span className="toggle-password" id="togglePassword">👁️</span>
-                                <br />
-                                <span className="toggle-text" id="toggleText">Sembunyikan</span>
+                                <span
+                                    id="togglePassword"
+                                    onClick={togglePasswordVisibility}
+                                    aria-label={passwordVisible ? "Hide password" : "Show password"}
+                                >
+                                    {passwordVisible ? "👁️‍🗨️" : "👁️"}
+                                </span>
+                                <span id="toggleText" onClick={togglePasswordVisibility}>
+                                    {passwordVisible ? "Sembunyikan" : "Tampilkan"}
+                                </span>
                             </div>
                         </div>
 
@@ -109,11 +123,11 @@ export default function LoginForm() {
                             <label className="remember-me">
                                 <input type="checkbox" id="remember" /> Ingat Saya
                             </label>
-                            <Link href="#" className="forgot-password">Lupa Password?</Link>
+                            <Link href="/forgot" className="forgot-password">Lupa Password?</Link>
                         </div>
                         <button className="submit-btn" disabled={loading}>
                             {loading ? (
-                                <Loader/>
+                                <Loader />
                             ) : (
                                 'LOGIN'
                             )}

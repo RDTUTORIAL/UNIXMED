@@ -8,8 +8,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 const validateName = (name: string) => {
     if (!name) return 'Name is required';
-    if (name.trim().length < 3) return 'Name must be at least 3 characters';
-    if (/[^a-zA-Z\s]/.test(name)) return 'Name must contain only letters and spaces';
+    if (name.trim().length < 3) return 'usernameame must be at least 3 characters';
+    if (/[^a-zA-Z0-9\s]/.test(name)) return 'username must contain only letters and number';
     return null;
 };
 
@@ -51,7 +51,7 @@ export async function POST(request: Request, response: Response) {
     var id = uuidv4();
     var passwordHash = await hashPassword(password)
     try {
-        const query = "INSERT INTO users (id, name, email, password, role) VALUES ($1, $2, $3, $4, 'patient') RETURNING *";
+        const query = "INSERT INTO users (id, username, email, password) VALUES ($1, $2, $3, $4) RETURNING *";
         const values = [id, name, email, passwordHash];
         const res = await pool.query(query, values);
         return new Response('{ "status": 200, message: "successfully registered account." }', { status: 200, headers: { 'content-type': 'application/json' } });

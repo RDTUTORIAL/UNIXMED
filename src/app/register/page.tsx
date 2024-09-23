@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
 import Loader from "@/components/Loader";
+import PasswordInput from "@/components/inputPassword";
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -11,10 +12,14 @@ export default function RegisterForm() {
     email: '',
     password: ''
   });
-
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [errors, setErrors] = useState<{ name?: string; email?: string; password?: string }>({});
   const [loading, setLoading] = useState(false)
   const router = useRouter();
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -30,8 +35,8 @@ export default function RegisterForm() {
       newErrors.name = 'Name is required';
     } else if (formData.name.trim().length < 3) {
       newErrors.name = 'Name must be at least 3 characters';
-    } else if (/[^a-zA-Z\s]/.test(formData.name)) {
-      newErrors.name = 'Name must contain only letters and spaces';
+    } else if (/[^a-zA-Z0-9\s]/.test(formData.name)) {
+      newErrors.name = 'Username must contain only letters and number';
     }
 
     if (!formData.email) {
@@ -68,7 +73,7 @@ export default function RegisterForm() {
             if (e.response?.data?.includes("password")) {
               setErrors({ password: e.response?.data })
               setLoading(false)
-            } else if (e.response?.data?.includes("email")) {              
+            } else if (e.response?.data?.includes("email")) {
               setErrors({ email: e.response?.data })
               setLoading(false)
             }
@@ -93,11 +98,11 @@ export default function RegisterForm() {
           <div className="form-container">
             <form onSubmit={handleSubmit}>
               <div className="input-group input-name">
-                <label htmlFor="name">Nama</label>
+                <label htmlFor="name">Username</label>
                 <input
                   type="text"
                   id="name"
-                  placeholder="Masukkan Nama"
+                  placeholder="Masukkan Username"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
@@ -121,7 +126,7 @@ export default function RegisterForm() {
               <div className="input-group password-container">
                 <label htmlFor="password">Password</label>
                 <input
-                  type="password"
+                  type={passwordVisible ? "text" : "password"}
                   id="password"
                   placeholder="Masukkan Password"
                   className="input-password"
@@ -131,16 +136,24 @@ export default function RegisterForm() {
                   required />
                 {errors?.password && <span style={dangerStyle}>{errors?.password}</span>}
                 <div className="toggle-password-container">
-                  <span className="toggle-password" id="togglePassword">👁️</span>
-                  <br />
-                  <span className="toggle-text" id="toggleText">Sembunyikan</span>
+                  <span
+                    id="togglePassword"
+                    onClick={togglePasswordVisibility}
+                    aria-label={passwordVisible ? "Hide password" : "Show password"}
+                  >
+                    {passwordVisible ? "👁️‍🗨️" : "👁️"}
+                  </span>
+                  <span id="toggleText" onClick={togglePasswordVisibility}>
+                    {passwordVisible ? "Sembunyikan" : "Tampilkan"}
+                  </span>
                 </div>
+
               </div>
 
               <div className="profile-buttons">
                 <button className="button" disabled={loading}>
                   {loading ? (
-                    <Loader/>
+                    <Loader />
                   ) : (
                     'Sign Up'
                   )}

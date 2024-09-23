@@ -10,7 +10,7 @@ import toast, { Toaster } from 'react-hot-toast';
 export default function Profile() {
     const router = useRouter()
     const [formData, setFormData] = useState({
-        name: '',
+        username: '',
         gender: '',
         birthday: '',
         city: '',
@@ -25,7 +25,7 @@ export default function Profile() {
             try {
                 const { data }: any = await axios.get("/api/users");
                 setFormData({
-                    name: data.data.nama || '',
+                    username: data.data.username || '',
                     gender: data.data.gender || '',
                     birthday: data.data.date_birthday ? data.data.date_birthday : '',
                     city: data.data.city || '',
@@ -64,19 +64,26 @@ export default function Profile() {
     };
 
     return (<div>
-        <Toaster/>
+        <Toaster />
+        <header>
+            <Navbar />
+        </header>
         <main>
             <section>
                 <div className="container">
                     <div className="image-setting-container">
                         <img src="/image/Myu.webp" className="image-setting" alt="Foto Profil" title="Foto Profil" />
+                        <label htmlFor="file-upload" className="custom-file-upload">
+                            Ubah Foto Profil
+                        </label>
+                        <input id="file-upload" type="file" className="input-edit-foto-profile" />
                     </div>
                     <form id="editProfileForm" onSubmit={handleSubmit}>
                         <div className="profile-section basic-info-form">
                             <h2>Informasi Dasar</h2>
                             <div className="basic-info-form">
                                 <label htmlFor="nama">Nama</label>
-                                <input type="text" id="nama" name="name" required value={formData.name} onChange={handleChange} />
+                                <input type="text" id="nama" name="name" required value={formData.username} onChange={handleChange} />
                             </div>
                             <div className="basic-info-form">
                                 <label htmlFor="alamat">Alamat</label>
@@ -102,7 +109,7 @@ export default function Profile() {
                             <div className="profile-section basic-info-form">
                                 <label>Jenis Kelamin</label>
                                 <br />
-                                <input type="radio" id="laki" name="gender" value="M" checked={formData.gender === 'Male' || formData.gender === 'M' } onChange={handleChange} />
+                                <input type="radio" id="laki" name="gender" value="M" checked={formData.gender === 'Male' || formData.gender === 'M'} onChange={handleChange} />
                                 <label htmlFor="laki">Laki-laki</label>
                                 <br />
                                 <input type="radio" id="perempuan" name="gender" value="F" checked={formData.gender === 'Female' || formData.gender === 'F'} onChange={handleChange} />
@@ -121,17 +128,6 @@ export default function Profile() {
                                 <label htmlFor="kota">Kota/Kabupaten</label>
                                 <input type="text" id="kota" name="city" value={formData.city} onChange={handleChange} />
                             </div>
-                        </div>
-
-                        <div className="profile-section">
-                            <h2>Pengaturan Privasi</h2>
-                            <label>Privasi</label>
-                            <br />
-                            <input type="radio" id="publik" name="privacy" value="Public" required />
-                            <label htmlFor="publik">Publik</label>
-                            <br />
-                            <input type="radio" id="pribadi" name="privacy" value="Private" required />
-                            <label htmlFor="pribadi">Pribadi</label>
                         </div>
 
                         <div className="profile-buttons-edit">

@@ -9,10 +9,10 @@ export async function GET(request: Request) {
   const offset = (page - 1) * limit;
   try {
     const totalQuery = `SELECT COUNT(*) FROM medications WHERE LOWER(name) LIKE $1;`;
-    const totalResult = await pool.query(totalQuery, [`%${searchQuery}%`]);
+    const totalResult = await pool.query(totalQuery, [`%${decodeURIComponent(searchQuery)}%`]);
     const total = parseInt(totalResult.rows[0].count, 10);
     const dataQuery = `SELECT * FROM medications WHERE LOWER(name) LIKE $1 ORDER BY id LIMIT $2 OFFSET $3;`;
-    const dataResult = await pool.query(dataQuery, [`%${searchQuery}%`, limit, offset]);
+    const dataResult = await pool.query(dataQuery, [`%${decodeURIComponent(searchQuery)}%`, limit, offset]);
     return NextResponse.json({
       total,
       page,

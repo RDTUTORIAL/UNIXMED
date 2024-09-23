@@ -13,14 +13,18 @@ const Navbar = dynamic(() => import('@/components/navBar'), { ssr: false });
 interface PostPageProps {
     params: {
         title: string;
+        id: string;
     };
 }
 
 export default async function ArtikelPage({ params }: PostPageProps) {
-    const { title } = params;
+    const { title, id } = params;
     var titleExt = title?.split("-")
     var titleExt2 = titleExt.join(" ")
-    var results = await pool.query(`SELECT * FROM article WHERE title = '${titleExt2}'`)
+    var idd = parseInt(id)
+    // var neww = decodeURIComponent(titleExt2).endsWith(" ") ? decodeURIComponent(titleExt2).slice(0, decodeURIComponent(titleExt2).length - 2) : decodeURIComponent(titleExt2);
+    var query = `SELECT * FROM articles WHERE article_id = ${idd}`
+    var results = await pool.query(query)
     var row: any = results.rows[0]
     if(results.rows?.length < 1) return notFound();
     return (<div>
@@ -31,7 +35,7 @@ export default async function ArtikelPage({ params }: PostPageProps) {
             <div className="artikel-page">
                 <div className="artikel-container">
                     <h1 className="judul-artikel">{row.title}</h1>
-                    <p className="keterangan-artikel">Ditulis oleh <span>{row.auhtor}</span> | {moment(row.create_at).format("LLLL")}</p>
+                    <p className="keterangan-artikel">Ditulis oleh <span>{row.author}</span> | {moment(row.create_at).format("LLLL")}</p>
                     <img src={row.image} alt={"Gambar-"+row.title?.replace(/ /g, "-")} className="gambar-artikel" />
                     <div className="isi-artikel" dangerouslySetInnerHTML={{ __html: row.html }} />
                 </div>

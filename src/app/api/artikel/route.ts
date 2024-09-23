@@ -9,13 +9,13 @@ export async function GET(request: Request) {
   const offset = (page - 1) * limit;
 
   try {
-    const totalQuery = `SELECT COUNT(*) FROM articles WHERE LOWER(title) LIKE $1;`;
+    const totalQuery = `SELECT COUNT(*) FROM articles WHERE TRIM(LOWER(title)) LIKE $1;`;
     const totalResult = await pool.query(totalQuery, [`%${searchQuery}%`]);
     const total = parseInt(totalResult.rows[0].count, 10);
 
     const dataQuery = `
       SELECT * FROM articles 
-      WHERE LOWER(title) LIKE $1 
+      WHERE TRIM(LOWER(title)) LIKE $1 
       ORDER BY article_id DESC 
       LIMIT $2 OFFSET $3;`;
     const dataResult = await pool.query(dataQuery, [`%${searchQuery}%`, limit, offset]);

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@develoka/angka-rupiah-js": "^1.0.3",
+    "@turf/turf": "^7.1.0",
     "@types/axios": "^0.9.36",
     "@types/bcrypt": "^5.0.2",
     "@types/moment": "^2.11.29",
@@ -20,6 +21,8 @@
     "cheerio": "^1.0.0",
     "framer-motion": "^11.5.6",
     "fs": "^0.0.1-security",
+    "geolib": "^3.3.4",
+    "haversine": "^1.1.1",
     "izitoast": "^1.4.0",
     "jsonwebtoken": "^9.0.2",
     "lodash.throttle": "^4.1.1",

@@ -5,7 +5,7 @@ export async function middleware(request: NextRequest) {
     const token = request.cookies.get('accessToken')?.value;
     const url = new URL(request.url);
 
-    const protectedRoutes = ['/profile', '/checkout', '/logout'];
+    const protectedRoutes = ['/profile', '/checkout', '/logout', '/checkout'];
     const loginRoutes = ['/login', '/register'];
 
     if (token) {

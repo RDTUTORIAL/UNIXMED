@@ -21,7 +21,7 @@ export async function GET(request: Request) {
     "status": 200, 
     "message": "success", 
     "data": { 
-        "nama": "${user.name}",
+        "username": "${user.username}",
         "email": "${user.email}",
         "phone_number": "${user.phone ? user.phone : ""}",
         "date_birthday": "${user.birthday ? moment(user.birthday).format("YYYY-MM-DD") : ""}",
