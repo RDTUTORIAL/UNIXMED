@@ -71,7 +71,6 @@ const buildUpdateQuery = (data, id) => {
 
 export async function POST(request: Request) {
     const { username, gender, birthday, city, address, phone, email, password } = await request.json();
-    console.log(username, gender, birthday, city, address, phone, email, password)
     var token = cookies().get("accessToken")?.value || ""
     var isAuth = jwtValid(token)
     let id: any = false;

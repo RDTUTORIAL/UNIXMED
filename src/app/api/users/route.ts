@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     try {
         if (isAuth) {
             var id: any = jwtDecode(token);
-            if (!id && id == false) return new Response('{ status: 401, message: `unauthorized` }', { status: 200, headers: { 'content-type': "application/json" } });
+            if (!id && id == false) return new Response('{ status: 401, message: `unauthorized` }', { status: 401, headers: { 'content-type': "application/json" } });
             user = await getUser(id?.id.toString())
         }
     } catch (e) {

@@ -118,6 +118,17 @@ a {
     text-decoration: underline;
 }
 
+.forgot-password2 {
+    color: #000000;
+    text-decoration: underline;
+}
+
+.go-to-signup {
+    padding-top: 12px;
+    display: flex;
+    justify-content: center;
+}
+
 .submit-btn {
     width: 100%;
     padding: 10px 15px;
@@ -129,6 +140,10 @@ a {
     cursor: pointer;
     margin-top: 20px;
     transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
 }
 
 .submit-btn:disabled {
@@ -151,7 +166,6 @@ a {
 .submit-btn:hover {
     background-color: #0056b3;
 }
-
 
 
 @media (max-width: 768px) {

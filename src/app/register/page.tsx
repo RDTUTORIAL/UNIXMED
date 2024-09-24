@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
 import Loader from "@/components/Loader";
 import PasswordInput from "@/components/inputPassword";
+import Link from "next/link";
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -158,6 +159,9 @@ export default function RegisterForm() {
                     'Sign Up'
                   )}
                 </button>
+                <div className="go-to-signup">
+                  <p style={{ margin: 0, padding: 0, paddingRight: '4px' }}>Sudah punya akun?</p><Link href="/login" className="forgot-password2" prefetch={true}>Login</Link>
+                </div>
               </div>
             </form>
           </div>

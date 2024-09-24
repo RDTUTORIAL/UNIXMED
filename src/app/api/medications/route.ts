@@ -6,22 +6,44 @@ export async function GET(request: Request) {
   const page = parseInt(searchParams.get('page') || '1');
   const limit = parseInt(searchParams.get('limit') || '10');
   const searchQuery = searchParams.get('search')?.toLowerCase() || '';
+  const id = searchParams.get('id')?.toLowerCase() || '';
   const offset = (page - 1) * limit;
-  try {
-    const totalQuery = `SELECT COUNT(*) FROM medications WHERE LOWER(name) LIKE $1;`;
-    const totalResult = await pool.query(totalQuery, [`%${decodeURIComponent(searchQuery)}%`]);
-    const total = parseInt(totalResult.rows[0].count, 10);
-    const dataQuery = `SELECT * FROM medications WHERE LOWER(name) LIKE $1 ORDER BY id LIMIT $2 OFFSET $3;`;
-    const dataResult = await pool.query(dataQuery, [`%${decodeURIComponent(searchQuery)}%`, limit, offset]);
-    return NextResponse.json({
-      total,
-      page,
-      limit,
-      data: dataResult.rows,
-    });
-  } catch (error) {
-    console.log(error)
-    console.error("Error fetching medications:", error);
-    return NextResponse.error();
+  if (id != '') {
+    try {
+      const totalQuery = `SELECT COUNT(*) FROM medications WHERE id = $1;`;
+      const totalResult = await pool.query(totalQuery, [`${id}`]);
+      const total = parseInt(totalResult.rows[0].count, 10);
+      const dataQuery = `SELECT * FROM medications WHERE id = $1;`;
+      const dataResult = await pool.query(dataQuery, [`${id}`]);
+      return NextResponse.json({
+        total,
+        page,
+        limit,
+        data: dataResult.rows,
+      });
+    } catch (error) {
+      console.log(error)
+      console.error("Error fetching medications:", error);
+      return NextResponse.error();
+    }
+  } else {
+    try {
+      const totalQuery = `SELECT COUNT(*) FROM medications WHERE LOWER(name) LIKE $1;`;
+      const totalResult = await pool.query(totalQuery, [`%${decodeURIComponent(searchQuery)}%`]);
+      const total = parseInt(totalResult.rows[0].count, 10);
+      const dataQuery = `SELECT * FROM medications WHERE LOWER(name) LIKE $1 ORDER BY id LIMIT $2 OFFSET $3;`;
+      const dataResult = await pool.query(dataQuery, [`%${decodeURIComponent(searchQuery)}%`, limit, offset]);
+      return NextResponse.json({
+        total,
+        page,
+        limit,
+        data: dataResult.rows,
+      });
+    } catch (error) {
+      console.log(error)
+      console.error("Error fetching medications:", error);
+      return NextResponse.error();
+    }
   }
+
 }

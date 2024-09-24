@@ -121,7 +121,7 @@ export default function LoginForm() {
 
                         <div className="actions">
                             <label className="remember-me">
-                                <input type="checkbox" id="remember" /> Ingat Saya
+                                <input type="checkbox" id="remember" checked /> Ingat Saya
                             </label>
                             <Link href="/forgot" className="forgot-password">Lupa Password?</Link>
                         </div>
@@ -132,6 +132,9 @@ export default function LoginForm() {
                                 'LOGIN'
                             )}
                         </button>
+                        <div className="go-to-signup">
+                            <p style={{ margin: 0, padding: 0, paddingRight: '4px' }}>Tidak punya akun?</p><Link href="/register" className="forgot-password2" prefetch={true}>Daftar</Link>
+                        </div>
                     </form>
                 </div>
             </section>

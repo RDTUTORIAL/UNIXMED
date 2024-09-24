@@ -128,6 +128,18 @@ a {
     text-decoration: underline;
 }
 
+.forgot-password2 {
+    color: #000000;
+    text-decoration: underline;
+}
+
+.go-to-signup {
+    padding-top: 12px;
+    display: flex;
+    justify-content: center;
+    
+}
+
 .profile-buttons {
     margin-top: 20px;
     text-align: center;
@@ -154,6 +166,11 @@ text-align: center;
 text-decoration: none;
 }
 
+.button:hover {
+background-color: #0056b3;
+}
+
+
 .button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
@@ -170,13 +187,6 @@ text-decoration: none;
     width: 100%;
     height: 100%;
 }
-
-
-.button:hover {
-background-color: #0056b3;
-}
-
-
 
 @media (max-width: 768px) {
     .form-container {

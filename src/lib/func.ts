@@ -48,3 +48,13 @@ export function jwtValid(token: string): boolean {
     return false;
   }
 }
+
+export function splitText(text: string, chunkSize: number): string[] {
+  let result: string[] = [];
+  
+  for (let i = 0; i < text.length; i += chunkSize) {
+      result.push(text.slice(i, i + chunkSize));
+  }
+  
+  return result;
+}

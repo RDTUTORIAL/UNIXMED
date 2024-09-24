@@ -2,6 +2,7 @@ import Footer from "@/components/footer"
 import Navbar from "@/components/navBar"
 import pool from "@/lib/db"
 import ApotekSection from "@/components/apotek"
+import { splitText } from "@/lib/func"
 
 export default async function ApotekTerdekat() {
     const result: any = await pool.query("select * from pharmacies")

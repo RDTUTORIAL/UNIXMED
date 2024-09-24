@@ -22,7 +22,6 @@ export default async function ArtikelPage({ params }: PostPageProps) {
     var titleExt = title?.split("-")
     var titleExt2 = titleExt.join(" ")
     var idd = parseInt(id)
-    // var neww = decodeURIComponent(titleExt2).endsWith(" ") ? decodeURIComponent(titleExt2).slice(0, decodeURIComponent(titleExt2).length - 2) : decodeURIComponent(titleExt2);
     var query = `SELECT * FROM articles WHERE article_id = ${idd}`
     var results = await pool.query(query)
     var row: any = results.rows[0]

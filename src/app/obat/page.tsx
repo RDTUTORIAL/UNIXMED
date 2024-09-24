@@ -112,7 +112,7 @@ export default function ObatPage() {
                         {photos.length > 0 ? (
                             photos.map((photo: any) => (
                                 <Link key={photo.id} href={"/obat/"+photo.name.replace(/\s+/g, "-").toLowerCase()} className="kategori-item">
-                                    <img src={photo.image} alt={photo.name} className="kategori-img" />
+                                    <img src={photo?.image || "/image/not-found.png"} alt={photo.name} className="kategori-img" />
                                     <h4 className="kategori-value">{photo.name}</h4>
                                 </Link>
                             ))

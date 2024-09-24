@@ -28,9 +28,9 @@ export default function RootLayout({
         <script src="https://kit.fontawesome.com/cd705c9d2a.js"/>
       </head>
       <body className={inter.className}>
-        {/* <Transition> */}
+        <Transition>
           {children}
-        {/* </Transition> */}
+        </Transition>
       </body>
     </html>
   );
