@@ -81,12 +81,11 @@ export default function ObatDetailPage({ params }: PostPageProps) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    medicationId: medication[0]?.id,
-                    quantity,
+                    medicationId: medication[0]?.id.toString(),
+                    quantity: quantity.toString(),
                     deliveryMethod: deliveryMethod.name,
                     paymentMethod: paymentMethod,
-                    email,
-                    total,
+                    email
                 }),
             });
 
@@ -96,8 +95,8 @@ export default function ObatDetailPage({ params }: PostPageProps) {
                     router.push(`/obat/${medication[0].name.replace(/\s+/g, "-").toLowerCase()}`); // Redirect to a thank you page
                 }, 2000)
             } else {
-                toast.error("Checkout failed. Please try again.")
-                alert('Checkout failed. Please try again.');
+                var data = await response.json()
+                toast.error(data.message)
             }
         } catch (error) {
             console.error('Checkout error:', error);
@@ -139,7 +138,7 @@ export default function ObatDetailPage({ params }: PostPageProps) {
                                     id="jnt"
                                     name="delivery"
                                     value="jnt"
-                                    onChange={() => handleDeliveryMethodChange({ name: 'J&T', price: 15900 })}
+                                    onChange={() => handleDeliveryMethodChange({ name: 'JNT', price: 15900 })}
                                 />
                                 <div className="pengiriman-keterangan">
                                     <h3 className="harga-produk-checkout">Rp. <span className="harga-produk-checkout-value">{formatNum(15900)}</span></h3>
@@ -192,7 +191,7 @@ export default function ObatDetailPage({ params }: PostPageProps) {
                                         <button
                                             className="metode-pembayaran-btn-checkout"
                                             onClick={() => handlePaymentMethodChange('shopeepay')}
-                                            style={{ backgroundColor: paymentMethod === 'shopeepay' ? '#e1e2e3' : 'transparent' }}
+                                            style={{ backgroundColor: paymentMethod === 'shopee_pay' ? '#e1e2e3' : 'transparent' }}
                                         >
                                             <img src="https://1.bp.blogspot.com/-EmJLucvvYZw/X0Gm1J37spI/AAAAAAAAC0s/Dyq4-ko9Eecvg0ostmowa2RToXZITkbcQCLcBGAsYHQ/w1200-h630-p-k-no-nu/Logo%2BShopeePay.png" alt="ShopeePay" className="metode-pembayaran-img" />
                                         </button>

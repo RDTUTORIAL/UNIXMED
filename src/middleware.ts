@@ -3,11 +3,9 @@ import type { NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
     const token = request.cookies.get('accessToken')?.value;
-    const url = new URL(request.url);
-
-    const protectedRoutes = ['/profile', '/logout', '/checkout'];
-    const loginRoutes = ['/login', '/register'];
-
+    const url = request.nextUrl;
+    const protectedRoutes = ['profile', 'logout', 'checkout'];
+    const loginRoutes = ['login', 'register'];
     if (token) {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/verifyToken`, {
             method: 'GET',
@@ -20,8 +18,7 @@ export async function middleware(request: NextRequest) {
         const { valid } = await res.json();
 
         if (valid) {
-            // Jika sudah login
-            if (loginRoutes.includes(url.pathname)) {
+            if (loginRoutes.includes(url.pathname.split("/")[1])) {
                 return NextResponse.redirect(new URL('/', request.url));
             }
             return NextResponse.next();
@@ -29,8 +26,7 @@ export async function middleware(request: NextRequest) {
             return NextResponse.redirect(new URL('/login', request.url));
         }
     } else {
-        // Jika belum login
-        if (protectedRoutes.includes(url.pathname)) {
+        if (protectedRoutes.includes(url.pathname.split("/")[1])) {
             return NextResponse.redirect(new URL('/login', request.url));
         }
         return NextResponse.next();

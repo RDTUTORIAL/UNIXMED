@@ -226,6 +226,16 @@ select {
   color: orange;
 }
 
+.batal{
+  border: 1px solid rgb(255, 0, 0);
+  color: rgb(255, 0, 0);
+}
+
+.pending{
+  border: 1px solid rgb(155, 155, 155);
+  color: rgb(155, 155, 155);
+}
+
 .berhasil{
   border: 1px solid green;
   color: green;

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { jwtValid, jwtDecode } from '@/lib/func';
-import { getUser } from '@/lib/UserFunction';
+import { getUser } from '@/lib/DBFunction';
 import moment from 'moment';
 
 export async function GET(request: Request) {
@@ -27,7 +27,8 @@ export async function GET(request: Request) {
         "date_birthday": "${user.birthday ? moment(user.birthday).format("YYYY-MM-DD") : ""}",
         "gender": "${user.gender == "M" ? "Male" : user.gender == "F" ? "Female" : "Other"}",
         "address": "${user.address ? user.address : ""}",
-        "city": "${user.city ? user.city : ""}"
+        "city": "${user.city ? user.city : ""}",
+        "pic": "${user.pic ? user.pic : "/image/Myu.webp"}"
     } 
 }`, { status: 200, headers: { 'content-type': "application/json" } });;
 }

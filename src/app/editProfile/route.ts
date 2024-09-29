@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import validator from 'validator';
 import { cookies } from 'next/headers';
 import { jwtValid, jwtDecode } from '@/lib/func';
-import { getUser } from '@/lib/UserFunction';
+import { getUser } from '@/lib/DBFunction';
 import pool from '@/lib/db';
 import { verifyPassword } from '@/lib/func';
 
@@ -108,7 +108,6 @@ export async function POST(request: Request) {
     }
 
     try {
-        console.log(queryy)
         const resultsd = await pool.query(queryy);
         return new Response(`{ "status": 200, "message": "Profile updated successfully" }`, { status: 200, headers: { 'content-type': "application/json" } });;
     } catch (error) {

@@ -11,7 +11,7 @@ const Navbar = dynamic(() => import('@/components/navBar'), { ssr: false });
 
 const fetchArtikel = async () => {
   try {
-    const res = await fetch(`/api/artikel?page=1&limit=3`);
+    const res = await fetch(`/api/artikel?page=1&limit=4`);
     if (!res.ok) {
       throw new Error('Network response was not ok');
     }

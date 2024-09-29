@@ -17,8 +17,37 @@ export default function Profile() {
         address: '',
         phone: '',
         email: '',
-        password: ""
+        password: "",
+        pic: ""
     });
+    const [image, setImage] = useState(null);
+    const [imageSrc, setImageSrc] = useState(null);
+    const handleFileChange = (e) => {
+        const file = e.target.files[0]
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event: any) => {
+                setImageSrc(event?.target?.result); // Update imageSrc with the base64 data
+            };
+            reader.readAsDataURL(file); // Read file as Data URL (base64)
+        }
+        setImage(e.target.files[0]);
+    };
+
+    const handleUpload = async () => {
+        if (!image) return
+        const formData = new FormData();
+        formData.append('file', image);
+        try {
+            const response = await axios.post('/api/uploadPP', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,6 +61,7 @@ export default function Profile() {
                     address: data.data.address || '',
                     phone: data.data.phone_number || '',
                     email: data.data.email || '',
+                    pic: data.data.pic,
                     password: ''
                 });
             } catch (e) {
@@ -53,13 +83,14 @@ export default function Profile() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            handleUpload();
             const response = await axios.post(`/editProfile`, formData);
             if (response.status === 200) {
                 toast.success('Profile updated successfully');
             }
         } catch (error) {
-            toast.error('Bad request 500');
-            console.error("Login failed:", error);
+            toast.error(error?.response?.data);
+            console.log("Login failed:", error);
         }
     };
 
@@ -72,11 +103,11 @@ export default function Profile() {
             <section>
                 <div className="container">
                     <div className="image-setting-container">
-                        <img src="/image/Myu.webp" className="image-setting" alt="Foto Profil" title="Foto Profil" />
+                        <img src={imageSrc ? imageSrc : formData.pic} className="image-setting" alt="Foto Profil" title="Foto Profil" />
                         <label htmlFor="file-upload" className="custom-file-upload">
                             Ubah Foto Profil
                         </label>
-                        <input id="file-upload" type="file" className="input-edit-foto-profile" />
+                        <input id="file-upload" type="file" accept="image/*" onChange={handleFileChange} className="input-edit-foto-profile" />
                     </div>
                     <form id="editProfileForm" onSubmit={handleSubmit}>
                         <div className="profile-section basic-info-form">

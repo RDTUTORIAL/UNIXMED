@@ -56,18 +56,20 @@ export default function LoginForm() {
         setLoading(true);
         if (validate(formData)) {
             try {
-                const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, formData);
+                const response = await axios.post(`/auth/login`, formData);
                 if (response.status === 200) {
                     router.push("/?isLogin=true", { scroll: true })
                     setLoading(false);
                 }
             } catch (error) {
                 setLoading(false);
+                toast.error("login failed, please try again.")
                 console.error("Login failed:", error);
 
             }
         } else {
             setLoading(false);
+            toast.error("Form validation failed")
             console.log('Form validation failed:', errors);
         }
     };

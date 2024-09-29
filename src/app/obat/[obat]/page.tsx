@@ -46,7 +46,6 @@ export default async function ObatDetailPage({ params }: PostPageProps) {
     var titleExt = obat?.split("-")
     var titleExt2 = titleExt.join(" ")
     var results = await fetchObat(titleExt2)
-    console.log(results.data[0])
     if (results.total < 1 || !results.data[0]) return notFound();
     return (<div>
         <header>
